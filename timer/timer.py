@@ -3,7 +3,9 @@ import machine
 from pimoroni import Button
 from picographics import PicoGraphics, DISPLAY_PICO_DISPLAY, PEN_P4
 
-# We're only using a few colours so we can use a 4 bit/16 colour palette and save RAM
+rtc = machine.RTC()
+
+# We're only using a few colours so we can use a 4 bit/16 colour palette and save RAM!
 display = PicoGraphics(display=DISPLAY_PICO_DISPLAY, pen_type=PEN_P4, rotate=0)
 
 display.set_font("bitmap8")
@@ -17,7 +19,9 @@ WHITE = display.create_pen(255, 255, 255)
 BLACK = display.create_pen(0, 0, 0)
 BG = display.create_pen(40, 40, 40)
 
-TIME_SECONDS = 1694879089
+TIME_SECONDS = 1695009599
+
+# sets up a handy function we can call to clear the screen
 
 
 def clear():
@@ -35,7 +39,8 @@ def format_time(seconds):
 
 def getTimeDifference(timeSeconds):
     currentTimestampSeconds = time.time()
-    timeDifference = currentTimestampSeconds - timeSeconds
+    timeDifference = currentTimestampSeconds - \
+        timeSeconds + (60 * 60 * 4)  # 4 hours for time zone
     return timeDifference
 
 
@@ -48,9 +53,10 @@ def getCurrentTime():
 
 
 def updateCurrentTime():
+    print("Updating current time")
     weekday = day_of_week(current_year, current_month, current_day)
-    machine.RTC().datetime((current_year, current_month, current_day,
-                            day_of_week, current_hour, current_minute, current_second, 0))
+    rtc.datetime((current_year, current_month, current_day,
+                 day_of_week, current_hour, current_minute, current_second, 0))
 
 
 def day_of_week(year, month, day):
@@ -71,9 +77,9 @@ date_adjustment_mode = False
 year_adjustment_mode = False
 
 current_second = 0
-current_hour = 14
-current_minute = 12
-current_day = 16
+current_hour = 20
+current_minute = 33
+current_day = 18
 current_month = 9
 current_year = 2023
 
